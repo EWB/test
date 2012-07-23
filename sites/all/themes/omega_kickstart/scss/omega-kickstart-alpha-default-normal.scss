@@ -1,0 +1,197 @@
+/* This file will hold styles that are loaded using the same media query as the normal grid. */
+/* If you are using the default media queries provided by Omega, these styles will also
+ *  apply to the widescreen layout unless they are overridden by the widescreen styles. */
+ 
+ /* This file will hold styles that are loaded using the same media query as the normal grid. */
+/* If you are using the default media queries provided by Omega, these styles will also
+ *  apply to the widescreen layout unless they are overridden by the widescreen styles. */
+
+/**************************************************
+* --
+* 2. Section header
+* --
+**************************************************/
+/**********************************************
+* 2.1. Zone user
+**********************************************/
+
+/*******************************************
+* 2.1.1. Region user first
+*******************************************/
+.block-menu-kickstart-user-menu .block-inner {
+  float: right;
+  margin-right: 10px;
+}
+/**********************************************
+* 2.4. Zone header
+**********************************************/
+.navigation .primary-menu {
+  float: left;
+  margin-right: 12px;
+}
+.navigation .second-menu {
+  clear: inherit;
+  float: right;
+}
+/**************************************************
+* --
+* 3. Section content
+* --
+**************************************************/
+/**********************************************
+* 3.2. Zone content
+**********************************************/
+/* HP blocks: Top advert */
+#promotional_banner .promotional_banner_special_offer {
+  float: right;
+  line-height: 22px;
+  margin-top: 4px;
+}
+/* HP blocks: Slideshow */
+.view-display-id-block_3 .bx-window {
+  overflow: visible !important;
+}
+.bx-wrapper,
+.bx-wrapper .bx-window {
+  height: 580px !important;
+  max-height: 580px;
+  min-width: 940px;
+}
+.event-slider .views-field-nothing,
+.event-slider .views-field-nothing em,
+.view-display-id-block_3 .bx-prev,
+.view-display-id-block_3 .bx-prev em,
+.view-display-id-block_3 .bx-next,
+.view-display-id-block_3 .bx-next em {
+  display: block;
+  text-indent: 0;
+}
+.view-display-id-block_3 .bx-prev,
+.view-display-id-block_3 .bx-next {
+  position: absolute;
+  bottom: 0;
+}
+.view-display-id-block_3 .bx-next {
+  right: 0;
+}
+.view-display-id-block_3 .bx-window {
+  overflow: visible !important;
+}
+.view-display-id-block_3 .item-list .event-slider li {
+  height: 480px;
+  width: 940px;
+}
+.event-slider .views-field-nothing,
+.view-display-id-block_3 .bx-prev,
+.view-display-id-block_3 .bx-next {
+  height: 80px;
+  text-align: center;
+  width: 320px;
+}
+.event-slider .views-field-nothing {
+  background: url('../images/bg_title_slideshow_current.png') left top no-repeat;
+  color: #ffffff;
+  padding-bottom: 5px;
+  position: absolute;
+  bottom: -100px;
+  left: 32.5%;
+}
+.view-display-id-block_3 .bx-prev,
+.view-display-id-block_3 .bx-next {
+  color: #000000;
+  text-decoration: none;
+  display: block;
+  margin-top: 15px;
+  padding-bottom: 5px;
+}
+.event-slider .views-field-nothing span,
+.view-display-id-block_3 .bx-prev span.control,
+.view-display-id-block_3 .bx-next span.control {
+  display: block;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  font-size: 21px;
+  height: 80px;
+  line-height: 28px;
+  padding: 10px 25px 0;
+  overflow: hidden;
+}
+.event-slider .views-field-nothing em,
+.view-display-id-block_3 .bx-prev span.control em,
+.view-display-id-block_3 .bx-next span.control em {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 900;
+  font-style: normal;
+  font-size: 32px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.view-display-id-block_3 .bx-prev {
+  background: url('../images/bg_title_slideshow_previous.png') left top no-repeat;
+  float: left;
+}
+.view-display-id-block_3 .bx-next {
+  background: url('../images/bg_title_slideshow_next.png') left top no-repeat;
+  float: right;
+  margin-right: 5px;
+}
+/**********************************************
+* 3.3. Zone postscript
+**********************************************/
+.view-display-id-block_1 .views-row,
+.view-display-id-block_2 .views-row,
+.block-blog-block .block-inner {
+  margin : 0;
+}
+.block-blog-block .block-title {
+  background-position: -18px 0;
+  padding-left: 25px;
+  text-align: left;
+  width: 112px;
+}
+/**************************************************
+* --
+* 4. Section footer
+* --
+**************************************************/
+/**
+* Connect with us
+*/
+.block-social h2 {
+  background: url('../images/bg_block_footer_title.png') left top no-repeat;
+  color: #eeeeee;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  line-height: inherit;
+  padding: 0 0 22px 25px;
+}
+/**************************************************
+* --
+* 5. Commerce specific
+* --
+**************************************************/
+/**********************************************
+* 5.3. Product page
+**********************************************/
+.commerce-kickstart-add-to-cart .commerce-product-title,
+.commerce-kickstart-add-to-cart .field,
+.commerce-kickstart-add-to-cart .commerce-product-sku {
+  clear: none;
+}
+.commerce-kickstart-add-to-cart .field,
+.commerce-kickstart-add-to-cart .commerce-product-sku {
+  clear: none;
+  float: none;
+}
+.commerce-kickstart-add-to-cart .field-name-field-images {
+  float: left;
+}
+/* Cloud zoom */
+.node-product-type .cloud-zoom-gallery-thumbs {
+  clear: none;
+}
+.node-product-type .cloud-zoom-gallery {
+  display: block;
+  float: none;
+  margin: 5px 0;
+}

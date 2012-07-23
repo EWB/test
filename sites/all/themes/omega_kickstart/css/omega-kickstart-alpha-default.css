@@ -1,0 +1,432 @@
+/* This file will hold styles for all layouts using the alpha grid (i.e. not the mobile layout). */
+/* This file will hold styles for all layouts using the alpha grid (i.e. not the mobile layout). */
+
+/*------------------------------------------------
+[Table of contents]
+0. Reset
+1. Global
+  1.1. Zones
+  1.2. Regions
+2. Section header
+  2.1. Zone user
+    2.1.1. Region user first
+    2.1.2. Region user second
+  2.2. Zone branding
+  2.3. Zone menu
+  2.4. Zone header
+3. Section content
+  3.1. Zone preface
+  3.2. Zone content
+    3.2.1. Sidebar first
+    3.2.2. Content
+    3.2.3. Sidebar second
+  3.3 Zone postscript
+4. Section footer
+  4.1. Zone footer
+  4.2. Zone footer2
+5. Commerce specific
+  5.1. Search & Collection page
+  5.2. All products page
+  5.3. Product page
+  5.4. Checkout process
+6. Kickstart specific
+  6.1. Homepage elements
+7. Blog
+8. User account
+------------------------------------------------*/
+
+/**************************************************
+* --
+* 1. Global
+* --
+**************************************************/
+body {
+  margin: 0;
+}
+/**************************************************
+* --
+* 2. Section header
+* --
+**************************************************/
+/**********************************************
+* 2.1. Zone user
+**********************************************/
+.zone-user-wrapper {
+  position: fixed;
+  z-index: 100;
+}
+/*******************************************
+* 2.1.2. Region user second
+*******************************************/
+#region-user-second {
+  background-color: transparent;
+  margin-left: 10px;
+}
+.region-user-second .region-user-second-inner {
+  margin-right: -10px;
+}
+#block-views-shopping-cart-block {
+  float: right;
+  margin: 0;
+}
+/**********************************************
+* 2.3. Zone menu
+**********************************************/
+/**
+* Navigation
+*/
+.navigation .primary-menu ul,
+.navigation .second-menu ul {
+  float: left;
+  margin: 26px 0px;
+  width: 100%;
+}
+.navigation .primary-menu .main-menu ul li,
+.navigation .second-menu .secondary-menu ul li,
+.navigation .primary-menu .main-menu li,
+.navigation .second-menu .secondary-menu li {
+  float: inherit;
+  width: auto;
+}
+.main-menu a,
+.secondary-menu a {
+  display: inline;
+}
+.navigation .primary-menu li a,
+.navigation .primary-menu li a.active,
+.navigation .primary-menu li a:hover,
+.navigation .second-menu li a,
+.navigation .second-menu li a.active,
+.navigation .second-menu li a:hover {
+  border-left-width: 0;
+  border-right-width: 0;
+}
+/* Main menu */
+.navigation li.first a {
+  -webkit-border-top-left-radius: 8px;
+  -webkit-border-bottom-left-radius: 8px;
+  -moz-border-radius-topleft: 8px;
+  -moz-border-radius-bottomleft: 8px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.navigation li.first a,
+.navigation li.first a.active,
+.navigation li.first a:hover {
+  border-left: 1px solid #d7d7d7;
+}
+.navigation li.last a {
+  -webkit-border-top-right-radius: 8px;
+  -webkit-border-bottom-right-radius: 8px;
+  -moz-border-radius-topright: 8px;
+  -moz-border-radius-bottomright: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.navigation li.last a,
+.navigation li.last a.active,
+.navigation li.last a:hover {
+  border-right: 1px solid #d7d7d7;
+}
+/* Secondary menu */
+.navigation .second-menu li.first a,
+.navigation .second-menu li.first a.active,
+.navigation .second-menu li.first a:hover {
+  border-left: 1px solid #d7d7d7;
+}
+.navigation .second-menu li.last a,
+.navigation .second-menu li.last a.active,
+.navigation .second-menu li.last a:hover {
+  border-right: 1px solid #d7d7d7;
+}
+/**************************************************
+* --
+* 3. Section content
+* --
+**************************************************/
+/**********************************************
+* 3.2. Zone content
+**********************************************/
+/*******************************************
+* 3.2.1. Sidebar first
+*******************************************/
+/* Price range */
+#search-api-ranges-block-view-form label {
+  float: left;
+}
+/*******************************************
+* 3.2.2. Content
+*******************************************/
+/**
+* Blocks
+*/
+/* HP blocks: Top advert */
+.block-promotional-banner {
+  background-color: #2698F2;
+  color: #ffffff;
+  font-size: 16px;
+  padding: 5px 10px;
+  position: relative;
+  top: 0px;
+  left: -10px;
+  width: 100%;
+}
+#promotional_banner .promotional_banner_saving {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 900;
+  font-size: 28px;
+  padding: 0px 22px 0 12px;
+}
+#promotional_banner span {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 38px;
+  text-transform: uppercase;
+}
+#promotional_banner .promotional_banner_special_offer {
+  background-color: #ffffff;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  color: #2698F2;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  padding: 5px 28px;
+  text-transform: capitalize;
+}
+/* HP blocks: Slideshow */
+.block-demo-content-block-3 {
+  position: relative;
+  top: -10px;
+}
+.bx-wrapper,
+.bx-wrapper .bx-window {
+  max-height: 168px;
+  padding-bottom: 0;
+  width: 100% !important;
+}
+.bx-wrapper ul {
+  max-height: 165px;
+  width: 100%;
+  min-width: 344px;
+  max-width: 344px;
+}
+.view-display-id-block_3 .item-list .event-slider li {
+  height: 168px;
+  margin: 0 auto;
+  width: 344px;
+}
+.view-display-id-block_3 .item-list .event-slider li img {
+  width: 100%;
+  height: auto;
+}
+.event-slider .views-field-nothing,
+.event-slider .views-field-nothing em,
+.view-display-id-block_3 .bx-prev,
+.view-display-id-block_3 .bx-prev em,
+.view-display-id-block_3 .bx-next,
+.view-display-id-block_3 .bx-next em {
+  display: none;
+  text-indent: -9999px;
+}
+/* HP blocks: Side advert */
+.block-shipping-discount {
+  left: -50px;
+  top: 85px;
+  position: absolute;
+  z-index: 100;
+}
+#shipping {
+  border: 6px solid #ffffff;
+  background-color: #000000;
+  -webkit-border-radius: 80px;
+  -moz-border-radius: 80px;
+  border-radius: 80px;
+  color: #2698F2;
+  display: block;
+  font-size: 13px;
+  height: 120px;
+  line-height: 24px;
+  text-align: center;
+  padding: 10px 5px;
+  width: 130px;
+}
+#shipping #shipping_message span {
+  border-bottom: 1px solid #ffffff;
+  display: block;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 10px 0 4px 0;
+  text-transform: uppercase;
+}
+#shipping #shipping_message span em {
+  font-size: 27px;
+  font-style: normal;
+}
+#shipping #shipping_currency {
+  display: block;
+  font-size: 27px;
+  margin-top: 2px;
+}
+#shipping #shipping_message {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+}
+#shipping #shipping_message span,
+#shipping #shipping_message span em,
+#shipping #shipping_currency {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+}
+/**********************************************
+* 3.3. Zone postscript
+**********************************************/
+/* Adverts blocks */
+.view-display-id-block_1 .views-row,
+.view-display-id-block_2 .views-row,
+.block-blog-block .block-inner {
+  background-color: #cccccc;
+  border: 1px solid #b1b1b1;
+  margin: 5px;
+  padding: 10px 0px 25px 0px;
+  position: relative;
+}
+.view-display-id-block_1 .views-row img,
+.view-display-id-block_2 .views-row img,
+.block-blog-block img {
+  border: 4px solid #ffffff;
+}
+.block-blog-block .block-title {
+  background: transparent url('../images/bg_block_homepage_title.png') -18px top no-repeat;
+  margin-top: 25px;
+  padding-left: 25px;
+  position: absolute;
+  top: 0;
+  left: -1px;
+  text-align: left;
+  width: 112px;
+  z-index: 1;
+}
+.view-display-id-block_1 .views-row .views-field-field-tagline,
+.view-display-id-block_2 .views-row .views-field-field-tagline,
+.block-blog-block .views-field-title {
+  margin: 5px 10px;
+  position: absolute;
+  bottom: 30px;
+  left: 14px;
+}
+.view-display-id-block_1 .views-row .views-field-field-tagline,
+.view-display-id-block_2 .views-row .views-field-field-tagline,
+.block-blog-block .views-field-title .field-content {
+  display: block;
+  width: 260px;
+}
+/**************************************************
+* --
+* 4. Section footer
+* --
+**************************************************/
+.section-footer ul.menu li {
+  display: inline;
+  float: left;
+}
+ .block-payment {
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+}
+/**************************************************
+* --
+* 5. Commerce specific
+* --
+**************************************************/
+/**********************************************
+* 5.1. Search & Collection page
+**********************************************/
+/**
+* Collection page
+*/
+.view-collection-taxonomy-term .view-header h2 {
+  font-size: 98px;
+  line-height: 100px;
+  margin: 0;
+  position: absolute;
+  bottom: 18px;
+  left: 15px;
+}
+.view-collection-taxonomy-term .view-header .collection-terms {
+  margin: 5px;
+  position: absolute;
+  right: 0;
+  bottom: 5px;
+}
+.view-collection-taxonomy-term .view-header .view-collection-taxonomy-term .view-content .item-list {
+  clear: both;
+  margin: 0;
+}
+.view-collection-taxonomy-term .view-header .view-collection-taxonomy-term .view-content .item-list h3 a,
+.view-collection-taxonomy-term .view-header .view-collection-taxonomy-term .view-content .item-list h3 a:hover {
+  border: 0;
+}
+/**********************************************
+* 5.3. Product page
+**********************************************/
+/* Product details */
+.commerce-add-to-cart label {
+  float: left;
+}
+.commerce-kickstart-add-to-cart .field-name-field-images {
+  clear: left;
+  float: left;
+}
+/**************************************************
+* --
+* 6. Kickstart specific
+* --
+**************************************************/
+/**********************************************
+* 6.1. Homepage
+**********************************************/
+.front #zone-postscript .grid-8 {
+  width: 313px;
+}
+.front #region-postscript-first,
+.front #region-postscript-second,
+.front #region-postscript-third {
+  margin: 0;
+}
+.front #region-postscript-first,
+.front #region-postscript-second {
+  margin-right: 10px;
+}
+/**************************************************
+* --
+* 8. User account
+* --
+**************************************************/
+/* User login, registration, lost password */
+#user_login_form,
+#user_pass_form,
+#user_register_form,
+.create-account {
+  clear: none;
+  float: left;
+  width: 45%;
+}
+#user_pass_form {
+  width: auto;
+}
+a.login-register {
+  margin-left: 25px;
+}
+/* User/login */
+#user_login_form {
+  border: 0;
+  border-right: 1px solid #2989D8;
+  padding-right: 20px;
+}
+.create-account {
+  margin: 0;
+  padding: 0 20px 20px 20px;
+}
