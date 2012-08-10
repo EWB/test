@@ -148,65 +148,11 @@ abstract class FacetapiAdapter {
   public function __construct(array $searcher_info) {
     $this->info = $searcher_info;
 
-    // Gather a whitelist of query type plugins supported by the backend that is
-    // associated with this adapter.
-    // @todo Change $registered_types to $type_whitelist for clarity?
-    $registered_types = array();
-    foreach (ctools_get_plugins('facetapi', 'query_types') as $plugin) {
-      if ($searcher_info['adapter'] == $plugin['handler']['adapter']) {
-        $type = call_user_func(array($plugin['handler']['class'], 'getType'));
-        $registered_types[$type] = $plugin['handler']['class'];
-      }
-    }
-
-    // Iterate over enabled facets and instantiate each one's query type plugin.
-    foreach ($this->getEnabledFacets() as $facet) {
-
-      // Get the machine name of the query type plugin used by this facet.
-      if (1 == count($facet['query types'])) {
-        // There is only one query type supported by this facet, so use it.
-        $query_type = $facet['query types'][0];
-      }
-      else {
-        // Get query type from settings if there is more than one supported by
-        // this facet. For example, some facets only support simple term queries
-        // while others also support numeric range queries. In those instances,
-        // administrators have to select which one to use in the facet's
-        // administrative interface.
-        $settings = $this->getFacetSettingsGlobal($facet)->settings;
-        $query_type = !empty($settings['query_type']) ? $settings['query_type'] : FALSE;
-      }
-
-      // Instantiate the query type plugin if it is in the whitelist of query
-      // types supported by the backend. Store objects in an instance variable
-      // keyed by the machine name of the facet.
-      if ($query_type && isset($registered_types[$query_type])) {
-        $plugin = new $registered_types[$query_type]($this, $facet);
-        $this->queryTypes[$facet['name']] = $plugin;
-      }
-      else {
-        $this->queryTypes[$facet['name']] = FALSE;
-      }
-    }
-
-    // Ensure all required url processor classes are loaded.
-    // See http://drupal.org/node/1306198
-    $plugin_path = dirname(__FILE__);
-    require_once $plugin_path . '/url_processor.inc';
-    require_once $plugin_path . '/url_processor_standard.inc';
-
-    // Instantiate the url processor plugin associated with the adapter.
-    $id = $searcher_info['url processor'];
-    $class = ctools_plugin_load_class('facetapi', 'url_processors', $id, 'handler');
-    if (!$class) {
-      $class = ctools_plugin_load_class('facetapi', 'url_processors', 'standard', 'handler');
-    }
-    $this->urlProcessor = new $class($this);
-
-    // Extract, process, and store the facet data.
-    $filter_key = $this->urlProcessor->getFilterKey();
-    $params = $this->urlProcessor->fetchParams();
-    $this->setParams($params, $filter_key);
+    // Load and initialize the url processor plugin. Initializing the plugin
+    // fetches the data from a source, usually $_GET, and trigger the methods
+    // that instantiate the query type plugins and process the active items.
+    $this->urlProcessor = $this->loadUrlProcessor($this->info['url processor']);
+    $this->initUrlProcessor();
   }
 
   /**
@@ -241,6 +187,56 @@ abstract class FacetapiAdapter {
   abstract public function suppressOutput($realm_name);
 
   /**
+   * Loads the URL processor associated with this adapter.
+   *
+   * Use FacetapiAdapter::getUrlProcessor() in favor of this method when getting
+   * the adapter for use in other classes. This method is separated out form the
+   * constructor for testing purposes only.
+   *
+   * @param string $id
+   *   The machine name of the url processor plugin.
+   *
+   * @return FacetapiUrlProcessor
+   *   An instance of the url processor plugin.
+   *
+   * @see http://drupal.org/node/1668484
+   */
+  public function loadUrlProcessor($id) {
+    // Ensure all required url processor classes are loaded.
+    // See http://drupal.org/node/1306198
+    $plugin_path = dirname(__FILE__);
+    require_once $plugin_path . '/url_processor.inc';
+    require_once $plugin_path . '/url_processor_standard.inc';
+
+    // Get the url processor plugin class. If the class for the passed plugin
+    // cannot be retrieved, log the error and load the standard plugin.
+    if (!$class = ctools_plugin_load_class('facetapi', 'url_processors', $id, 'handler')) {
+      watchdog('facetapi', 'Url processor plugin "@id" not valid, loading standard plugin.', array('@id' => $id), WATCHDOG_ERROR);
+      $class = ctools_plugin_load_class('facetapi', 'url_processors', 'standard', 'handler');
+    }
+
+    // Instantiates and initializes plugin.
+    return new $class($this);
+  }
+
+  /**
+   * Extracts, stores, and processes facet data.
+   *
+   * Wrapper around FacetapiAdapter::setParams() that fetches the params via the
+   * url processor plugin from some source, usually $_GET, and passes the filter
+   * key that is set in the plugin. This method is useful when the params and
+   * filter key are reset directly through the url processor and the active
+   * items need to be reprocessed by the adapter.
+   *
+   * @see FacetapiAdapter::setParams()
+   */
+  public function initUrlProcessor() {
+    $params = $this->urlProcessor->fetchParams();
+    $filter_key = $this->urlProcessor->getFilterKey();
+    $this->setParams($params, $filter_key);
+  }
+
+  /**
    * Processes and stores the extracted facet data.
    *
    * Uses the url processor plugin to normalize the data extracted from the
@@ -269,14 +265,18 @@ abstract class FacetapiAdapter {
   /**
    * Processes active facet items.
    *
-   * Extracts active items from the source, usually the query string, and uses
-   * the query type plugins to extract any additional information such as the
-   * start and end values for ranges.
+   * Instantiates the query type plugins for all enabled facets. Extracts active
+   * items from the source, usually the query string, and uses the query type
+   * plugins to extract any additional information such as the start and end
+   * values for ranges.
    *
    * @see FacetapiAdapter::setParams()
    */
   public function processActiveItems() {
     $this->activeItems = array('facet' => array(), 'filter' => array());
+
+    // Refresh the query type plugins for all enabled facets.
+    $this->queryTypes = $this->loadQueryTypePlugins();
 
     // Group enabled facets by facet alias. It is possible for aliases to be
     // common across different facets, although they are usually unique.
@@ -321,6 +321,65 @@ abstract class FacetapiAdapter {
         }
       }
     }
+  }
+
+  /**
+   * Returns an array of instantiated query type plugins for enabled facets.
+   *
+   * Iterates over the adapter's enabled facets and loads the appropriate query
+   * type plugin. If the adapter does not support the plugin, FALSE is set in
+   * place of a FacetapiQueryTypeInterface object.
+   *
+   * @return array
+   *   An associative array keyed by facet name to FacetapiQueryTypeInterface
+   *   object, FALSE if the query type is not supported bu this searcher.
+   *
+   * @see FacetapiAdapter::processActiveItems()
+   */
+  public function loadQueryTypePlugins() {
+    $query_types = array();
+
+    // Gather a whitelist of query type plugins supported by this searcher.
+    $plugin_ids = array();
+    foreach (ctools_get_plugins('facetapi', 'query_types') as $plugin) {
+      if ($this->info['adapter'] == $plugin['handler']['adapter']) {
+        $type = call_user_func(array($plugin['handler']['class'], 'getType'));
+        $plugin_ids[$type] = $plugin['handler']['class'];
+      }
+    }
+
+    // Iterate over enabled facets and instantiate each one's query type plugin.
+    foreach ($this->getEnabledFacets() as $facet) {
+
+      // Get the machine name of the query type plugin used by this facet.
+      if (1 == count($facet['query types'])) {
+        // There is only one query type supported by this facet, so use it.
+        $query_type = $facet['query types'][0];
+      }
+      else {
+        // Get query type from settings if there is more than one supported by
+        // this facet. For example, some facets only support simple term queries
+        // while others also support numeric range queries. In those instances,
+        // administrators have to select which one to use in the facet's
+        // administrative interface.
+        $settings = $this->getFacetSettingsGlobal($facet)->settings;
+        $query_type = !empty($settings['query_type']) ? $settings['query_type'] : FALSE;
+      }
+
+      // Instantiate the query type plugin if it is in the whitelist of query
+      // types supported by the backend. Store objects in an instance variable
+      // keyed by the machine name of the facet.
+      if ($query_type && isset($plugin_ids[$query_type])) {
+        $plugin = new $plugin_ids[$query_type]($this, $facet);
+        $query_types[$facet['name']] = $plugin;
+      }
+      else {
+        $query_types[$facet['name']] = FALSE;
+      }
+    }
+
+    // Return the instantiated query type plugins.
+    return $query_types;
   }
 
   /**
@@ -764,15 +823,21 @@ abstract class FacetapiAdapter {
       $this->settings[$name] = $this->initSettingsObject($name, $facet['name']);
       $is_new = empty($this->settings[$name]->settings);
 
+      // Ensure the default operator and query type are valid.
+      // @see http://drupal.org/node/1443340
+      $default_query_type = reset($facet['query types']);
+      $allowed_operators = array_filter($facet['allowed operators']);
+      $default_operator = key($allowed_operators);
+
       // Apply defaults common across all configs.
       $this->settings[$name]->settings += array(
-        'operator' => FACETAPI_OPERATOR_AND,
+        'operator' => $default_operator,
         'hard_limit' => 50,
         'dependencies' => array(),
         'facet_mincount' => 1,
         'facet_missing' => 0,
         'flatten' => 0,
-        'query_type' => 'term',
+        'query_type' => $default_query_type,
       );
 
       // Apply the adapter's default settings.
@@ -1208,7 +1273,8 @@ class FacetapiFacet implements ArrayAccess {
     if ($class = ctools_plugin_load_class('facetapi', 'widgets', $widget_name, 'handler')) {
       $widget_plugin = new $class($widget_name, $realm, $this, $settings);
       $widget_plugin->init();
-    } else {
+    }
+    else {
       watchdog('facetapi', 'Widget %name not valid.', array('%name' => $widget_name), WATCHDOG_ERROR);
       return array();
     }

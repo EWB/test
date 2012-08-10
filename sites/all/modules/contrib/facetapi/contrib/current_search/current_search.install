@@ -2,7 +2,8 @@
 
 /**
  * @file
- * Installation functions for the Current Search Blocks module.
+ * Install, update, and uninstall functions for the Current Search Blocks
+ * module.
  */
 
 /**

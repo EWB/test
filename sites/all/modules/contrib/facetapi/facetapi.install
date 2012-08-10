@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Installation functions for the Facet API module.
+ * Install, update, and uninstall functions for the Facet API module.
  */
 
 /**

@@ -64,6 +64,18 @@ function facetapi_get_block_info(array $realm_names) {
 }
 
 /**
+ * Implements hook_ctools_block_info().
+ *
+ * @see http://drupal.org/node/1669918
+ */
+function facetapi_ctools_block_info($module, $delta, &$info) {
+  // Give the Facet API blocks their own category.
+  $info['category'] = t('Facet API');
+  // Allow blocks to be used before the search results in Panels.
+  $info['render last'] = TRUE;
+}
+
+/**
  * Returns block cache settings.
  *
  * @param $searcher

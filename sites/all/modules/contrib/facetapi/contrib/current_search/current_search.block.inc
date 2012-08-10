@@ -78,14 +78,11 @@ function current_search_block_info() {
  * Returns the content for a facet based on the delta.
  */
 function current_search_block_view($delta = '') {
-  // Test block visibility if not already tested.
-  $map = &drupal_static('current_search_delta_map');
-  if (NULL === $map && !current_search_check_visibility($delta)) {
+  // Test block visibility.
+  $searcher = current_search_get_block_searcher($delta);
+  if (!current_search_check_visibility($delta)) {
     return;
   }
-
-  // Gets searcher from delta map.
-  $searcher = $map[$delta];
 
   // Makes sure the adapter and configuration can be loaded.
   $adapter = facetapi_adapter_load($searcher);
@@ -156,30 +153,16 @@ function current_search_set_block_searcher($name, $searcher) {
  *   A boolean flagging whether to display this block or not.
  */
 function current_search_check_visibility($delta) {
-
-  // Caches the delta map so we can get it in current_search_block_view().
-  $map = &drupal_static('current_search_delta_map');
-  if (NULL === $map) {
-    $map = array();
-    $result = db_query('SELECT delta, searcher FROM {block_current_search}');
-    foreach ($result as $record) {
-      $map[$record->delta] = $record->searcher;
-    }
-  }
-
-  // Apply default if necessary.
-  if (empty($map[$delta])) {
-    $map[$delta] = current_search_get_default_searcher();
-  }
+  $searcher = current_search_get_block_searcher($delta);
 
   // Checks whether block should be displayed.
-  if (!facetapi_is_active_searcher($map[$delta])) {
+  if (!facetapi_is_active_searcher($searcher)) {
     return FALSE;
   }
-  if (!$adapter = facetapi_adapter_load($map[$delta])) {
+  if (!$adapter = facetapi_adapter_load($searcher)) {
     return FALSE;
   }
-  if (!$adapter->searchExecuted($map[$delta])) {
+  if (!$adapter->searchExecuted($searcher)) {
     return FALSE;
   }
   if (!$config = current_search_item_load($delta)) {
@@ -189,6 +172,30 @@ function current_search_check_visibility($delta) {
   // Returns TRUE if search keys were entered by the user or this block is
   // configured to be displayed on empty pages.
   return ($adapter->getSearchKeys() || $config->settings['advanced']['empty_searches']);
+}
+
+/**
+ * Gets the searcher associated with the delta.
+ *
+ * @param string $delta
+ *   The block delta.
+ *
+ * @return string
+ *   The machine name of the searcher associated with the block.
+ */
+function current_search_get_block_searcher($delta) {
+  $map = &drupal_static('current_search_delta_map');
+  if (NULL === $map) {
+    $map = array();
+    $result = db_query('SELECT delta, searcher FROM {block_current_search}');
+    foreach ($result as $record) {
+      $map[$record->delta] = $record->searcher;
+    }
+  }
+  if (!isset($map[$delta])) {
+    $map[$delta] = current_search_get_default_searcher();
+  }
+  return $map[$delta];
 }
 
 /**
